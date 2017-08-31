@@ -77,9 +77,11 @@ def norms(xs, mah=True):
         L   ---   Scatter
 
 """
-def single_round(n, k_n, df, mu, L, mah=True):
-    return hill(sorted(norms(single_sample(n,df,mu,L),mah=mah))[n-k_n:])
-
+def single_round(n, k_n, df, mu, L, mah=True, known=False):
+    if not known:
+        return hill(sorted(norms(single_sample(n,df,mu,L),mah=mah))[n-k_n:])
+    else:
+        return hill(sorted(np.random.standard_t(df, size = n))[n-k_n:])
 
 
 
@@ -94,9 +96,9 @@ def single_round(n, k_n, df, mu, L, mah=True):
         L     ---   Scatter
         ofile ---   Ouput file
 """
-def main(bign, n, k_n, df, mu, L, mah=True, ofile="out.csv"):
+def main(bign, n, k_n, df, mu, L, mah=True, ofile="out.csv", known=False):
     with open(ofile, "a") as f:
-        out = [single_round(n, k_n, df, mu, L, mah) for _ in range(bign)]
+        out = [single_round(n, k_n, df, mu, L, mah, known=known) for _ in range(bign)]
         f.write(str(n)+";"+";".join(map(str, out))+"\n")
 
 if __name__ == "__main__":
@@ -113,6 +115,7 @@ if __name__ == "__main__":
     # Optional arguments
     arg.add_argument("--ofile", type=str, help = "output file")
     arg.add_argument("--mah", type=int, help = """which norm to use: 0 = l2 norm, 1 = elliptical norm (default)""")
+    arg.add_argument("--known", help= "use known location and scatter", action="store_true")
 
     args = arg.parse_args()
 
@@ -120,7 +123,8 @@ if __name__ == "__main__":
     L  = np.array(ast.literal_eval(args.L), dtype=np.float64)
 
     ofile = "out.csv"
-    mah = True
+    mah   = True
+    known = False
 
     if args.ofile:
         ofile = args.ofile
@@ -128,4 +132,7 @@ if __name__ == "__main__":
     if args.mah == 0:
         mah = False
 
-    main(args.rounds, args.n, args.k_n, args.df, mu, L, mah=mah, ofile=ofile)
+    if args.known:
+        known = True
+
+    main(args.rounds, args.n, args.k_n, args.df, mu, L, mah=mah, ofile=ofile, known=known)
