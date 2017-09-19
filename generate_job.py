@@ -21,12 +21,16 @@ def write_sbatch(dim, df, mah, n):
         #SBATCH -t %d:%02d:%02d
         #SBATCH --mem-per-cpu=100M
         #SBATCH -o debug.out
+        module load anaconda2
+        source activate new_numpy
         srun python simu.py 2000 %s %s %s %s --mah %s --ofile %s''' % (h, m, s, n, int(np.sqrt(n)), df, dim, mah, outfile)
     else:
         jobscript = '''#!/bin/bash
         #SBATCH -t %d:%02d:%02d
         #SBATCH --mem-per-cpu=100M
         #SBATCH -o debug.out
+        module load anaconda2
+        source activate new_numpy
         srun python simu.py 2000 %s %s %s %s --known --ofile %s''' % (h, m, s, n, int(np.sqrt(n)), df, dim, outfile)
     jobscript = re.sub("\n +", "\n", jobscript)
     with open("jobs/dim%s-df%s-n%s-mah%s.sbatch" %(dim, df, n, mah), "w") as f:
