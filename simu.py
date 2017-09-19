@@ -1,6 +1,9 @@
+#TODO: MOVE ARRAY DEFINITIONS TO A SEPARATE FILE.
+
 import numpy as np
 import argparse
 import ast 
+import json
 
 """
     Arguments:
@@ -109,8 +112,7 @@ if __name__ == "__main__":
     arg.add_argument("n", type=int, help="the sample size per round")
     arg.add_argument("k_n", type=int, help="the tail threshold")
     arg.add_argument("df", type=float, help="degrees of freedom (Student-t)")
-    arg.add_argument("mu", type=str, help="location vector as string")
-    arg.add_argument("L", type=str, help="scatter matrix as string")
+    arg.add_argument("dim", type=int, help="dimension (3 or 20)")
 
     # Optional arguments
     arg.add_argument("--ofile", type=str, help = "output file")
@@ -119,8 +121,15 @@ if __name__ == "__main__":
 
     args = arg.parse_args()
 
-    mu = np.array(ast.literal_eval(args.mu), dtype=np.float64)
-    L  = np.array(ast.literal_eval(args.L), dtype=np.float64)
+    with open("param.txt", "r") as f:
+        params = json.loads(f.read())
+
+    if args.dim == 3:
+        mu = np.asarray(params["location"]["mu3"])
+        L  = np.asarray(params["scatter"]["S3"])
+    else:
+        mu = np.asarray(params["location"]["mu20"])
+        L  = np.asarray(params["scatter"]["S20"])
 
     ofile = "out.csv"
     mah   = True
