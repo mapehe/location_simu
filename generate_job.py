@@ -1,5 +1,3 @@
-# TODO: MOVE ARRAY DEFINITIONS TO A SEPARATE FILE.
-
 import numpy as np
 import re
 
