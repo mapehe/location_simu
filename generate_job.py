@@ -15,7 +15,7 @@ def write_sbatch(dim, df, mah, n):
     total_jobs += 1
     m, s = divmod(ex_time, 60)
     h, m = divmod(m, 60)
-    outfile = "out/dim%s-df%s-mah%s.csv" %(dim, df, mah)
+    outfile = "out/n%s-dim%s-df%s-mah%s.csv" %(n, dim, df, mah)
     if mah != 2:
         jobscript = '''#!/bin/bash
         #SBATCH -t %d:%02d:%02d
