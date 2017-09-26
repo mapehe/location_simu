@@ -39,11 +39,10 @@ def write_sbatch(dim, df, mah, n):
 for dim in [3, 20]:
     for df in [5, 10]:
         for mah in range(3):
-            for r in range(25):
-                n = (r+1)*20
-                write_sbatch(dim, df, mah, n)
-            for r in range(96):
-                n = 100*r+500
+            for r in range(1000):
+                if r == 0:
+                    continue
+                n = 100*r
                 write_sbatch(dim, df, mah, n)
 
 m, s = divmod(total_time, 60)
