@@ -24,5 +24,5 @@ for dim in [3, 20]:
                 n = 100*r
                 write_sbatch(dim, df, mah, n)
 
-print "%s jobs generated in total" %(total_jobs)
+print "sbatch submit.sbatch --array=1-%s" %(total_jobs)
 
