@@ -10,7 +10,7 @@ def write_sbatch(dim, df, mah, n):
     outfile = "out/n%s-dim%s-df%s-mah%s.csv" %(n, dim, df, mah)
     if mah != 2:
         params = "2000 %s %s %s %s --mah %s --ofile %s" % (n, int(np.sqrt(n)), df, dim, mah, outfile)
-    else: 
+    else:
         params = "2000 %s %s %s %s --known --ofile %s" % (n, int(np.sqrt(n)), df, dim, outfile)
     with open("jobs/%s.in" %(total_jobs), "w") as f:
         f.write(params)
@@ -24,5 +24,10 @@ for dim in [3, 20]:
                 n = 100*r
                 write_sbatch(dim, df, mah, n)
 
-print "sbatch submit.sbatch --array=1-%s" %(total_jobs)
+with open("submit.sbatch", "r") as f:
+    s = f.read()
+    s = re.sub("--array=.+?\n", "--array=1-%s\n" %(total_jobs), s)
+
+with open("submit.sbatch", "w") as f:
+    f.write(s)
 
