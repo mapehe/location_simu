@@ -7,6 +7,7 @@ total_jobs = 0
 def write_sbatch(dim, df, mah, n):
     global total_jobs
     total_jobs += 1
+    outfile = "out/n%s-dim%s-df%s-mah%s.csv" %(n, dim, df, mah)
     if mah != 2:
         params = "2000 %s %s %s %s --mah %s --ofile %s" % (n, int(np.sqrt(n)), df, dim, mah, outfile)
     else: 
@@ -17,7 +18,7 @@ def write_sbatch(dim, df, mah, n):
 for dim in [3, 20]:
     for df in [5, 10]:
         for mah in range(3):
-            for r in range(1000):
+            for r in range(2000):
                 if r == 0:
                     continue
                 n = 100*r

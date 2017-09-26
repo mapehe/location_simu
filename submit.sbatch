@@ -1,0 +1,7 @@
+#!/bin/bash
+#SBATCH -t 02:00:00
+#SBATCH --mem-per-cpu=100M
+#SBATCH -o %s 
+module load anaconda2 
+source activate new_numpy 
+srun python simu.py < jobs/$SLURM_ARRAY_TASK_ID.in 
