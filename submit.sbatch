@@ -5,4 +5,4 @@
 #SBATCH --array=1-23988
 module load anaconda2 
 source activate new_numpy 
-srun python simu.py < jobs/$SLURM_ARRAY_TASK_ID.in 
+srun python simu.py `< jobs/$SLURM_ARRAY_TASK_ID.in`
