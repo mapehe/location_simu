@@ -16,14 +16,15 @@ def write_sbatch(dim, df, mah, n):
     m, s = divmod(ex_time, 60)
     h, m = divmod(m, 60)
     outfile = "out/n%s-dim%s-df%s-mah%s.csv" %(n, dim, df, mah)
+    logfile = "logs/n%s-dim%s-df%s-mah%s.log" %(n, dim, df, mah)
     if mah != 2:
         jobscript = '''#!/bin/bash
         #SBATCH -t %d:%02d:%02d
         #SBATCH --mem-per-cpu=100M
-        #SBATCH -o debug.out
+        #SBATCH -o %s
         module load anaconda2
         source activate new_numpy
-        srun python simu.py 2000 %s %s %s %s --mah %s --ofile %s''' % (h, m, s, n, int(np.sqrt(n)), df, dim, mah, outfile)
+        srun python simu.py 2000 %s %s %s %s --mah %s --ofile %s''' % (h, m, s, logfile, n, int(np.sqrt(n)), df, dim, mah, outfile)
     else:
         jobscript = '''#!/bin/bash
         #SBATCH -t %d:%02d:%02d
