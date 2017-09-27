@@ -32,3 +32,10 @@ if ERRORS == 0:
 else:
     print "There were %s errors." %ERRORS
 
+    with open("submit.sbatch", "r") as f:
+        s = f.read()
+        s = re.sub("--array=.+?\n", "--array=1-%s\n" %(ERRORS), s)
+
+    with open("submit.sbatch", "w") as f:
+        f.write(s)
+
