@@ -3,6 +3,23 @@ import argparse
 import ast 
 import json
 
+
+"""
+    Arguments:
+        
+        arr ---   An array of data
+"""
+def process_array(arr):
+    ns        = norms(arr)
+    ms        = norms(arr, mah = False)
+    sample    = -np.array(sorted(-np.array(ns)))
+    sample2   = -np.array(sorted(-np.array(ms)))
+    for kn in range(int(0.2*len(ns))):
+        if kn < 5:
+            continue
+        with open("out/out.csv", "a") as f:
+            f.write("%s;%s;%s\n" %(kn, hill(sample[:kn]), hill(sample2[:kn])))
+
 """
     Arguments:
     
@@ -68,23 +85,6 @@ def norms(xs, mah=True):
     else:
         return [np.linalg.norm(x) for x in xs]
 
-"""
-    Arguments:
-
-        n   ---   Sample size
-        k_n ---   Tail threshold
-        df  ---   Degrees of freedom (Student-t)
-        mu  ---   Location
-        L   ---   Scatter
-
-"""
-def single_round(n, k_n, df, mu, L, mah=True, known=False):
-    if not known:
-        return hill(sorted(norms(single_sample(n,df,mu,L),mah=mah))[n-k_n:])
-    else:
-        return hill(sorted(np.random.standard_t(df, size = n))[n-k_n:])
-
-
 
 """
     Arguments:
@@ -98,9 +98,8 @@ def single_round(n, k_n, df, mu, L, mah=True, known=False):
         ofile ---   Ouput file
 """
 def main(bign, n, k_n, df, mu, L, mah=True, ofile="out.csv", known=False):
-    with open(ofile, "a") as f:
-        out = [single_round(n, k_n, df, mu, L, mah, known=known) for _ in range(bign)]
-        f.write(str(n)+";"+";".join(map(str, out))+"\n")
+    arr = single_sample(n,df,mu,L)
+    process_array(arr)
 
 if __name__ == "__main__":
     arg = argparse.ArgumentParser()
