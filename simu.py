@@ -2,6 +2,7 @@ import numpy as np
 import argparse
 import ast 
 import json
+import os
 
 
 """
@@ -9,16 +10,16 @@ import json
         
         arr ---   An array of data
 """
-def process_array(arr):
+def process_array(arr, ofile):
     ns        = norms(arr)
     ms        = norms(arr, mah = False)
     sample    = -np.array(sorted(-np.array(ns)))
     sample2   = -np.array(sorted(-np.array(ms)))
     for kn in range(int(0.2*len(ns))):
-        if kn < 5:
+        if kn < 4:
             continue
-        with open("out/out.csv", "a") as f:
-            f.write("%s;%s;%s\n" %(kn, hill(sample[:kn]), hill(sample2[:kn])))
+        with open(os.path.join("out", ofile), "a") as f:
+            f.write("%s;%s;%s\n" %(kn+1, hill(sample[:(kn+1)]), hill(sample2[:(kn+1)])))
 
 """
     Arguments:
@@ -99,7 +100,7 @@ def norms(xs, mah=True):
 """
 def main(bign, n, k_n, df, mu, L, mah=True, ofile="out.csv", known=False):
     arr = single_sample(n,df,mu,L)
-    process_array(arr)
+    process_array(arr, ofile)
 
 if __name__ == "__main__":
     arg = argparse.ArgumentParser()
