@@ -106,9 +106,7 @@ if __name__ == "__main__":
     arg = argparse.ArgumentParser()
     
     # Compulsory arguments
-    arg.add_argument("rounds", type=int, help="the number of times the Hill estimator will be evaluated")
     arg.add_argument("n", type=int, help="the sample size per round")
-    arg.add_argument("k_n", type=int, help="the tail threshold")
     arg.add_argument("df", type=float, help="degrees of freedom (Student-t)")
     arg.add_argument("dim", type=int, help="dimension (3 or 20)")
 
